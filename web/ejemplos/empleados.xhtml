@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../plantillas/plantilla.xhtml">
+            <ui:define name="content">
+                <h:form id='form'>                    
+                    <p:dataTable id='tblPersona' value="#{personaControl.lstPersonas}" var='persona' paginator="true" rows="4"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+
+
+
+                        <p:column headerText="Nombres" >
+                            <p:outputLabel value="#{persona.nombre}" />
+                        </p:column>
+                        <p:column headerText="Apellidos" >
+                            <p:outputLabel value="#{persona.apellido}" />
+                        </p:column>        
+                        <p:column headerText="DUI" >
+                            <p:outputLabel value="#{persona.DUI}" />
+                        </p:column>        
+                        <p:column headerText="Fecha de Nacimiento" >
+                            <p:outputLabel value="#{persona.fechaNacimiento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </p:outputLabel>
+                        </p:column>     
+
+                        <p:column headerText="Acciones" >
+                            <p:commandButton icon="ui-icon-search" oncomplete="PF('wdlgPersona').show()" update=':form:dlgPersona'>
+                                <f:setPropertyActionListener target="#{personaControl.persona}" value="#{persona}" />
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-trash" oncomplete="PF('wdlgConfirmacion').show()" process="@this" update=':form:dlgConfirmacion'>
+                                <f:setPropertyActionListener target="#{personaControl.persona}" value="#{persona}" />
+                            </p:commandButton>                            
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:dialog widgetVar="wdlgPersona" id='dlgPersona'>
+                        <p:panelGrid columns="2" >
+                            <p:outputLabel value='Nombres: ' />
+                            <p:outputLabel value='#{personaControl.persona.nombre}' />
+
+                            <p:outputLabel value='Apellidos: ' />
+                            <p:outputLabel value='#{personaControl.persona.apellido}' />    
+
+                            <p:outputLabel value='Fecha de Nacimiento: ' />
+                            <p:outputLabel value='#{personaControl.persona.fechaNacimiento}' >
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </p:outputLabel>
+
+                            <p:outputLabel value='Edad: ' />
+                            <p:outputLabel value='#{personaControl.persona.edad}' />       
+
+                            <p:outputLabel value='Teléfono: ' />
+                            <p:outputLabel value='#{personaControl.persona.telefono}' />      
+
+                            <p:outputLabel value='Sueldo: ' />
+                            <p:outputLabel value='#{personaControl.persona.sueldo}' />    
+
+                            <p:outputLabel value='DUI:' />
+                            <p:outputLabel value='#{personaControl.persona.DUI}' />  
+
+
+                        </p:panelGrid>
+                        <p:commandButton value='Cerrar' oncomplete="PF('wdlgPersona').hide()" />
+                    </p:dialog >
+                    <p:dialog id="dlgConfirmacion" widgetVar="wdlgConfirmacion" >
+                        <p:panelGrid >
+                            <p:row>
+                                <p:column colspan="2">
+                                    <p:outputLabel value="¿Realmente desea borrar el registro?" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:commandButton value="SI" 
+                                                     actionListener='#{personaControl.borrarPersona}'
+                                                     oncomplete="PF('wdlgConfirmacion').hide()" 
+                                                     update=':form:tblPersona'/>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton value='NO' oncomplete="PF('wdlgConfirmacion').hide()" />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>                    
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
